@@ -92,18 +92,52 @@ Nao exponha a porta do PostgreSQL na internet.
 
 ## Limitacoes atuais
 
-Esta versao foi preparada a partir de uma agenda
-de barbearia individual, nao de um SaaS multiempresa.
+Esta primeira versao e um sistema de agendamento para uma
+barbearia individual. Nao e um SaaS multiempresa.
 
-Algumas regras de dias e limites de horarios permanecem
-fixas no codigo e precisam ser adaptadas para outros
-funcionamentos.
+### Horarios de funcionamento
 
-A atribuicao de novos clientes ao profissional principal
-tambem deve ser revisada conforme a necessidade.
+A API de agendamento utiliza limites definidos no codigo:
 
-As integracoes de mensagens exigem configuracao
-e revisao antes de serem ativadas.
+- Manha: 09:00 as 12:00
+- Horario extra: 12:00 as 12:30, quando permitido
+- Tarde: 14:00 as 19:30
+
+Esses limites estao em `src/lib/time.ts`, na funcao
+`withinOperatingHours`.
+
+Alterar o horario em uma tela administrativa nao significa
+que a API permitira agendamentos fora desses limites.
+
+Os dias de funcionamento e as regras de liberacao semanal
+tambem possuem logica especifica na aplicacao.
+
+### Profissionais
+
+O fluxo publico utiliza a funcao `assignedProfessional`
+para determinar o profissional a partir do cadastro
+e das regras internas.
+
+Esta versao nao deve ser apresentada como um sistema com
+escolha inteiramente livre de qualquer profissional.
+
+### Convites e mensagens
+
+A logica de convites semanais possui uma janela de
+segunda-feira, no horario de Sao Paulo.
+
+Integracoes de WhatsApp, Meta e outros servicos externos
+nao devem ser consideradas prontas para uso sem
+configuracao, autorizacao e testes adicionais.
+
+### Personalizacao
+
+Quem desejar horarios, distribuicao de profissionais ou
+regras diferentes precisara revisar o codigo correspondente.
+
+Antes de usar com clientes reais, realize testes completos
+da agenda e configure suas proprias credenciais.
+
 
 ## Seguranca
 
