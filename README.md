@@ -150,7 +150,9 @@ da agenda e configure suas proprias credenciais.
 
 ## Licenca
 
-Distribuido sob a licenca MIT. Consulte LICENSE.
+O codigo original e distribuido sob a licenca MIT. Consulte LICENSE.
+
+As dependencias de terceiros possuem licencas proprias. Consulte DEPENDENCIAS_E_LICENCAS.md.
 
 ## Aviso
 
