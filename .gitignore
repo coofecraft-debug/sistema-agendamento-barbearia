@@ -1,0 +1,31 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+
+*.log
+*.bak
+*.dump
+*.sql.gz
+
+backups/
+secrets/
+private/
+
+# Protecao de credenciais e backups
+**/.env
+**/.env.*
+**/*.bak
+
+# Permitir apenas o modelo publico de configuracao
+!.env.example

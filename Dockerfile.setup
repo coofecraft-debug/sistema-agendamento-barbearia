@@ -1,0 +1,15 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY --chown=node:node tsconfig.json ./
+COPY --chown=node:node src ./src
+COPY --chown=node:node migrations ./migrations
+COPY --chown=node:node scripts/migrate.ts scripts/seed.ts scripts/local-guard.ts scripts/guarded-migrate.ts ./scripts/
+
+USER node
+
+CMD ["sh", "-c", "./node_modules/.bin/tsx scripts/guarded-migrate.ts && ./node_modules/.bin/tsx scripts/seed.ts"]

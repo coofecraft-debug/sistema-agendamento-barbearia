@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+      width="1200" height="700" viewBox="0 0 1200 700">
+      <rect width="1200" height="700" fill="#181818"/>
+      <rect x="28" y="28" width="1144" height="644"
+        rx="24" fill="none" stroke="#C6A667" stroke-width="3"/>
+      <circle cx="600" cy="260" r="90"
+        fill="#262626" stroke="#C6A667" stroke-width="4"/>
+      <path d="M550 225 L650 295 M650 225 L550 295"
+        stroke="#C6A667" stroke-width="9"
+        stroke-linecap="round"/>
+      <text x="600" y="445" text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="46" font-weight="bold"
+        fill="#F4F1E9">AGENDA BARBEARIA</text>
+      <text x="600" y="505" text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="24" fill="#B8B8B8">
+        Sistema de Agendamento para Barbearias
+      </text>
+    </svg>

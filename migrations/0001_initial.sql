@@ -1,0 +1,17 @@
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+CREATE TABLE profissionais (id serial PRIMARY KEY, nome text NOT NULL, papel text NOT NULL UNIQUE CHECK(papel IN ('dono','funcionario')), ativo boolean NOT NULL DEFAULT true);
+CREATE TABLE clientes (id serial PRIMARY KEY, nome text NOT NULL, whatsapp text NOT NULL UNIQUE, fixo boolean NOT NULL DEFAULT false, profissional_preferencial integer REFERENCES profissionais, observacoes text NOT NULL DEFAULT '');
+CREATE TABLE servicos (id serial PRIMARY KEY, nome text NOT NULL, preco_centavos integer NOT NULL CHECK(preco_centavos>=0), duracao integer NOT NULL CHECK(duracao BETWEEN 15 AND 240 AND duracao%15=0), ativo boolean NOT NULL DEFAULT true);
+CREATE TABLE expediente (id serial PRIMARY KEY, profissional_id integer NOT NULL REFERENCES profissionais, dia_semana integer NOT NULL CHECK(dia_semana BETWEEN 0 AND 6), inicio time NOT NULL, fim time NOT NULL, CHECK(inicio<fim));
+CREATE TABLE agenda_liberacoes (id serial PRIMARY KEY, inicio date NOT NULL, fim date NOT NULL, tipo text NOT NULL CHECK(tipo IN ('semanal','dezembro')), UNIQUE(inicio,tipo), CHECK(inicio<=fim));
+CREATE TABLE agendamentos (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), cliente_id integer NOT NULL REFERENCES clientes, servico_id integer NOT NULL REFERENCES servicos, profissional_id integer NOT NULL REFERENCES profissionais, inicio timestamptz NOT NULL, fim timestamptz NOT NULL, status text NOT NULL DEFAULT 'Agendado' CHECK(status IN ('Agendado','Confirmado','Cancelado','Concluído','Faltou')), preco_centavos integer NOT NULL CHECK(preco_centavos>=0), observacoes text NOT NULL DEFAULT '', chave uuid NOT NULL UNIQUE, CHECK(inicio<fim));
+CREATE TABLE bloqueios (id serial PRIMARY KEY, profissional_id integer NOT NULL REFERENCES profissionais, inicio timestamptz NOT NULL, fim timestamptz NOT NULL, motivo text NOT NULL DEFAULT '', CHECK(inicio<fim));
+CREATE TABLE horarios_extras (id serial PRIMARY KEY, profissional_id integer NOT NULL REFERENCES profissionais, data date NOT NULL, inicio time NOT NULL, fim time NOT NULL, CHECK(inicio<fim));
+CREATE TABLE mensagens (id bigserial PRIMARY KEY, agendamento_id uuid REFERENCES agendamentos, criado_em timestamptz NOT NULL DEFAULT now());
+CREATE TABLE administradores (id serial PRIMARY KEY, email text NOT NULL UNIQUE, nome text NOT NULL, senha_hash text NOT NULL);
+CREATE TABLE sessoes (hash text PRIMARY KEY, administrador_id integer NOT NULL REFERENCES administradores, expira_em timestamptz NOT NULL);
+CREATE TABLE login_tentativas (chave text PRIMARY KEY, quantidade integer NOT NULL DEFAULT 1, expira_em timestamptz NOT NULL);
+CREATE INDEX agendamentos_inicio ON agendamentos(inicio);
+CREATE INDEX agendamentos_cliente ON agendamentos(cliente_id,inicio DESC);
+CREATE INDEX bloqueios_periodo ON bloqueios(profissional_id,inicio,fim);
+CREATE INDEX sessoes_expiracao ON sessoes(expira_em);
